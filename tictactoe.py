@@ -4,6 +4,7 @@ screen_width=300
 screen_height=300
 white=(255,255,255)
 line_color=(0,0,0)
+height=5
 
 player_List=["X","O"]
 botnames=["Alicia","Margo","Scott", "Mayson"]
@@ -19,14 +20,14 @@ secondplayer=""
 again=True
 
 
-def heights():
-    height=5
-    return height
+def Partner():
+    partner=input("Play with \"bot\" or a \"friend\": ").lower()
+    return partner
 
 
-def gameSetup(height, With):
+def gameSetup(height,   partner):
     
-    if With=="friend"  : 
+    if  partner=="friend"  : 
         i=0
         for row in range(height):
             for column in range(height):
@@ -43,8 +44,8 @@ def gameSetup(height, With):
 
             print()            
 
-    elif With=="bot" or With == "robot":
-        print("Great choice! You are playing with: ", random.choice(botnames))
+    elif    partner=="bot" or  partner == "robot":
+        print("Great choice! You are playing    partner: ", random.choice(botnames))
         i=0
         for row in range(height):
             for column in range(height):
@@ -58,18 +59,16 @@ def gameSetup(height, With):
                         print(i, end ="")
                     else:
                         for i in open_Space:
-                            print(i, end ="")       
+                            print(i, end ="")     
 
-            print()      
-
-    elif With=="quit":
+    elif partner=="quit":
         leave()
     
-    else:
-        print("Invalid choice.\nTry \"bot\" or \"friend\"")    
-        gameSetup(height,With)
+    # else:
+    #     print("Invalid choice.\nTry \"bot\" or \"friend\"")    
+    #     return gameSetup(height   partner)
 
-    return With    
+    return  partner    
 
 
 def variableAssignment1():                      
@@ -85,7 +84,7 @@ def variableAssignment1():
         quit()    
     
     else:
-        print("Invalid choice.\nTry \"bot\" or \"friend\"")      
+        print("Invalid choice.\nTry \"X\" or \"O\"")      
         variableAssignment1()
     
     return player1
@@ -134,7 +133,7 @@ def spacesFriend2(player2):
     for space in range(len(open_Space)): 
         global choice2
         choice2=input(player2+": ")
-        if choice2.isdigit:
+        if choice2.isdigit():
             global choice2b
             choice2b=int(choice2)
             if choice2b in open_Space:
@@ -157,7 +156,7 @@ def spacesFriend2(player2):
 def loopFriend():
     while  len(moves1)<6 and len(moves2)<5:
         firstchoice=spacesFriend1(firstplayer)
-        if len(moves1)==5:
+        if len(moves1)<5:
             secondchoice= spacesFriend2(secondplayer)
             if ( secondchoice=="quit"):
                 leave()
@@ -183,7 +182,7 @@ def spacesBotFriend(player1):
     for space in range(len(open_Space)):  
         global choice1
         choice1=input(player1+" : ")
-        if choice1.isdigit:
+        if choice1.isdigit():
             global choice1b
             choice1b=int(choice1)
             if choice1b in open_Space:
@@ -279,6 +278,20 @@ def tie():
 def winnerAssessment():
     
     print(open_Space[0]==open_Space[1]==open_Space[2]==player1)
+    print(open_Space[3]==open_Space[4]==open_Space[5]==player1)
+    print(open_Space[6]==open_Space[7]==open_Space[8]==player1)
+    print(open_Space[0]==open_Space[1]==open_Space[2]==player2)
+    print(open_Space[3]==open_Space[4]==open_Space[5]==player2)
+    print(open_Space[6]==open_Space[7]==open_Space[8]==player2)
+    print(open_Space[0]==open_Space[4]==open_Space[8]==player1)
+    print(open_Space[2]==open_Space[4]==open_Space[6]==player1)
+    print(open_Space[0]==open_Space[4]==open_Space[8]==player2)
+    print(open_Space[2]==open_Space[4]==open_Space[6]==player2)
+    print()
+    print()
+    print()
+    print()
+
     
     # rows for player1
     if open_Space[0]==open_Space[1]==open_Space[2]==player1:
@@ -298,15 +311,15 @@ def winnerAssessment():
         winner()
     
     # rows for player2
-    elif open_Space[0]==open_Space[1]==open_Space[2]==player1:
+    elif open_Space[0]==open_Space[1]==open_Space[2]==player2:
         winner=player2
         print("The winner is",winner)
         winner()
-    elif open_Space[3]==open_Space[4]==open_Space[5]==player1:
+    elif open_Space[3]==open_Space[4]==open_Space[5]==player2:
         winner=player2
         print("The winner is",winner)
         winner()
-    elif open_Space[6]==open_Space[7]==open_Space[8]==player1:
+    elif open_Space[6]==open_Space[7]==open_Space[8]==player2:
         winner=player2
         print("The winner is",winner)
         winner()
@@ -380,30 +393,28 @@ if __name__=="__main__":
    
     open_Space=[]
     newSpace=open_Space.copy
-    With=input("Play with \"bot\" or a \"friend\": ").lower()
+    partner=input("Play partner \"bot\" or a \"friend\": ").lower()
 
 
     while again==True:
 
-        gameheight=heights()
-        gameSetup(gameheight, With)
-        if With=="friend":
+        gameSetup(height,   partner)
+        if  partner=="friend":
             firstplayer =variableAssignment1()
             secondplayer=variableAssignment2(firstplayer)
             loopFriend()
 
-        elif With=="bot":
-            gameheight=heights()
+        elif  partner=="bot":
             firstplayer =variableAssignment1()
             secondplayer=variableAssignment2(firstplayer)
             loopBot()
 
-        elif With=="quit":
+        elif    partner=="quit":
             leave()
 
         else:
-            With=input("Play with \"bot\" or a \"friend\": ").lower()
+            Partner()
 
         break    
     
-            
+        
