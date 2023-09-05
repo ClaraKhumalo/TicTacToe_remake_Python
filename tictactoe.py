@@ -158,14 +158,9 @@ def loopFriend():
         firstchoice=spacesFriend1(firstplayer)
         if len(moves1)<5:
             secondchoice= spacesFriend2(secondplayer)
-            if ( secondchoice=="quit"):
-                leave()
-            else:
-                print("invalid input")
-                secondchoice= spacesFriend2(secondplayer) 
-        # elif len(moves1)==5 and len(moves2)==4:
-        #         print("Winner assessment... ")
-        #         return winnerAssessment()        
+            # else:
+            #     print("invalid input")
+            #     secondchoice= spacesFriend2(secondplayer)     
         elif ( firstchoice=="quit"):
             leave()
         elif len(moves1)==5 and len(moves2)==4:
@@ -243,23 +238,30 @@ def loopBot():
         return False
 
 
-def winner():      
+def winner():    
+    """
+    There is winner. 
+    Gives player the option to begin a new game or leave the game.
+    """  
     global askagain
     print("Prove that you didnt get lucky and play again.")
     askagain=input( "\"accept\" or \"decline\"? ").lower()
     if askagain=="accept":
         again=True
-        # return again
+        return again
     elif askagain=="decline":
         print("Sad to see you leave. Come back again soon!")  
         again=False  
-        # return again
+        return again
     else:
         print("Invalid Input")    
         winner()
 
 
 def tie():
+    """
+    There is no winner. The game resulted in a tie.
+    """
     global askagain
     askagain=input("No winner. Try again.\n \"accept\" or \"decline\"? ").lower()
     if askagain=="accept":
@@ -276,100 +278,86 @@ def tie():
 
 
 def winnerAssessment():
-    
-    print(open_Space[0]==open_Space[1]==open_Space[2]==player1)
-    print(open_Space[3]==open_Space[4]==open_Space[5]==player1)
-    print(open_Space[6]==open_Space[7]==open_Space[8]==player1)
-    print(open_Space[0]==open_Space[1]==open_Space[2]==player2)
-    print(open_Space[3]==open_Space[4]==open_Space[5]==player2)
-    print(open_Space[6]==open_Space[7]==open_Space[8]==player2)
-    print(open_Space[0]==open_Space[4]==open_Space[8]==player1)
-    print(open_Space[2]==open_Space[4]==open_Space[6]==player1)
-    print(open_Space[0]==open_Space[4]==open_Space[8]==player2)
-    print(open_Space[2]==open_Space[4]==open_Space[6]==player2)
-    print()
-    print()
-    print()
-    print()
-
-    
+    """
+    Asses who the winner is.
+    """
     # rows for player1
     if open_Space[0]==open_Space[1]==open_Space[2]==player1:
-        winner=player1
-        print("The winner is",winner)
+        winnerIs=player1
+        print("The winner is",winnerIs)
         print("Prove that you didnt get lucky and play again.")
         winner() 
     elif open_Space[3]==open_Space[4]==open_Space[5]==player1:
-        winner=player1
-        print("The winner is",winner)
+        winnerIs=player1
+        print("The winner is",winnerIs)
         print("Prove that you didnt get lucky and play again.")
         winner()     
     elif open_Space[6]==open_Space[7]==open_Space[8]==player1: 
-        winner=player1
-        print("The winner is",winner)
+        winnerIs=player1
+        print("The winner is",winnerIs)
         print("Prove that you didnt get lucky and play again.")
         winner()
     
     # rows for player2
     elif open_Space[0]==open_Space[1]==open_Space[2]==player2:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()
     elif open_Space[3]==open_Space[4]==open_Space[5]==player2:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()
     elif open_Space[6]==open_Space[7]==open_Space[8]==player2:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()
 
     # diagonals for player1
     elif open_Space[0]==open_Space[4]==open_Space[8]==player1:
-        winner=player1
-        print("The winner is",winner)
+        winnerIs=player1
+        print("The winner is",winnerIs)
         winner()
     elif open_Space[2]==open_Space[4]==open_Space[6]==player1:
-        winner=player1
-        print("The winner is",winner)
+        winnerIs=player1
+        print("The winner is",winnerIs)
         winner()
     
     # diagonals for player2
     elif open_Space[0]==open_Space[4]==open_Space[8]==player1:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()
     elif open_Space[2]==open_Space[4]==open_Space[6]==player1:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()
 
     # columns for player1
     elif open_Space[0]==open_Space[3]==open_Space[6]==player1:
-        winner=player1
-        print("The winner is",winner)
+        winnerIs=player1
+        print("The winner is",winnerIs)
         winner()
     elif open_Space[1]==open_Space[4]==open_Space[7]==player1:
-        winner=player1
-        print("The winner is",winner)  
+        winnerIs=player1
+        print("The winner is",winnerIs)  
         winner()    
     elif open_Space[2]==open_Space[5]==open_Space[8]==player1:
-        winner=player1
-        print("The winner is",winner)    
+        winnerIs=player1
+        print("The winner is",winnerIs)    
         winner()
 
     # columns for player2
     elif open_Space[0]==open_Space[3]==open_Space[6]==player1:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()
     elif open_Space[1]==open_Space[4]==open_Space[7]==player1:
-        winner=player2
-        print("The winner is",winner)      
+        winnerIs=player2
+        print("The winner is",winnerIs)      
         winner()
     elif open_Space[2]==open_Space[5]==open_Space[8]==player1:
-        winner=player2
-        print("The winner is",winner)
+        winnerIs=player2
+        print("The winner is",winnerIs)
         winner()         
            
     # tie
@@ -416,5 +404,3 @@ if __name__=="__main__":
             Partner()
 
         break    
-    
-        
