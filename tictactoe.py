@@ -19,46 +19,28 @@ tied=False
 
 
 def gameSetup(height,   partner):
-    if  partner=="friend"  : 
-        i=0
-        for row in range(height):
-            for column in range(height):
-                if (row == 0) or (row == height-1) or (column == 0) or (column ==  height-1):
-                    print("*", end="")
+    i=0
+    for row in range(height):
+        for column in range(height):
+            if (row == 0) or (row == height-1) or (column == 0) or (column ==  height-1):
+                print("*", end="")
+            else:
+                if change_board==0:
+                    i+=1
+                    open_Space.append(i)
+                    open_Space_copy.append(i)
+                    print(i, end ="")
                 else:
-                    if change_board==0:
-                        i+=1
-                        open_Space.append(i)
-                        open_Space_copy.append(i)
+                    for i in open_Space:
                         print(i, end ="")
-                    else:
-                        for i in open_Space:
-                            print(i, end ="")
 
-            print()            
-
-    elif    partner=="bot" or  partner == "robot":
-        print("Great choice! You are playing    partner: ", random.choice(botnames))
-        i=0
-        for row in range(height):
-            for column in range(height):
-                if (row == 0) or (row == height-1) or (column == 0) or (column ==  height-1):
-                    print("*", end="")
-                else:
-                    if change_board==0:
-                        i+=1
-                        open_Space.append(i)
-                        open_Space_copy.append(i)
-                        print(i, end ="")
-                    else:
-                        for i in open_Space:
-                            print(i, end ="")     
-
-    elif partner=="quit":
-        leave()
+        print()            
 
 
-def variableAssignment1():                      
+def variableAssignment1():                  
+    """
+    Assigns player title (x or o) based on user player1 input.
+    """    
     global player1
     player1=input( "X or O: " ).upper()
     if player1 not in player_List:
@@ -68,7 +50,7 @@ def variableAssignment1():
         print("Player 1 is "+player1)
 
     elif player1.lower()=="quit":
-        quit()    
+        leave()    
     
     else:
         print("Invalid choice.\nTry \"X\" or \"O\"")      
@@ -78,6 +60,10 @@ def variableAssignment1():
 
 
 def variableAssignment2(player1):  
+    """
+    Assigns remaining title (x or o)  to player two.
+    """  
+
     global player2
     player2=""  
     for taken in player_List:         
@@ -89,6 +75,10 @@ def variableAssignment2(player1):
 
 
 def spacesFriend1(player1, player2):
+    """
+    Gets user input for first player.
+    """
+
     print( "choose a number from the list of available spaces: ",str(open_Space),"... " )     
     for space in range(len(open_Space)): 
         global choice1
@@ -104,10 +94,12 @@ def spacesFriend1(player1, player2):
                     return spacesFriend2(player2)   
                 return winnerAssessment()
             elif choice1.lower()=="quit":
-                return quit()
+                return  leave()
             elif choice1b not in open_Space:
                 print(choice1b,"is not an available number") 
                 return spacesFriend1(player1, player2)  
+        elif choice1=="quit":
+            return leave()        
         else: 
             print("invalid input: ", choice1)     
             return spacesFriend1(player1, player2) 
@@ -116,6 +108,10 @@ def spacesFriend1(player1, player2):
                            
 
 def spacesFriend2(player2):
+    """
+    Gets user input for second player.
+    """
+
     for space in range(len(open_Space)): 
         global choice2
         choice2=input(player2+": ")
@@ -128,10 +124,12 @@ def spacesFriend2(player2):
                 amount2.append(player2)
                 return winnerAssessment()
             elif choice2.lower()=="quit":
-                quit()
+                leave()
             elif choice2b not in open_Space:
                 print(choice2b,"is not an available number") 
                 return spacesFriend2(player2)  
+        elif choice1=="quit":
+            return leave()         
         else:        
             print("invalid input: ", choice2)  
             return spacesFriend2(player2) 
@@ -140,12 +138,21 @@ def spacesFriend2(player2):
 
 
 def loopFriend():
+    """
+    Prompts user input until there is a winner or there are no more open
+    spaces (there is a tie).
+    """
+
     while won==False or tied==False:
         firstchoice=spacesFriend1(firstplayer, secondplayer)
         return firstchoice
 
 
 def spacesBotFriend(player1):
+    """
+    Gets user input for first player.
+    """
+
     print( "choose a number from the list of available spaces: ",str(open_Space),"... " )     
     for space in range(len(open_Space)):  
         global choice1
@@ -160,7 +167,7 @@ def spacesBotFriend(player1):
                 amount1.append(player1)
                 return choice1b
             elif choice1.lower()=="quit":
-                quit()
+                leave()
             elif choice1b not in open_Space:
                 print(choice1,"is not an available number") 
                 spacesBotFriend(player1)  
@@ -174,6 +181,10 @@ def spacesBotFriend(player1):
       
 
 def spacesBot(player2):    
+    """
+    TRandomises input for second player (bot).
+    """
+
     for space in range(len(open_Space)): 
         global choice2
         choice2=random.choice(open_Space_copy)
@@ -209,11 +220,12 @@ def loopBot():
             return loopBot()
 
 
-def winner():    
+def winner(): 
     """
     There is winner. 
     Gives player the option to begin a new game or leave the game.
     """  
+
     global won
     won=True
 
@@ -222,8 +234,9 @@ def winner():
     askagain=input( "\"accept\" or \"decline\"? ").lower()
     if askagain=="accept":
         print("Let's try again") 
+        reset_Globals()
         again=True
-        return again
+        return True
     elif askagain=="decline":
         print("Sad to see you leave. Come back again soon!")  
         again=False  
@@ -238,6 +251,7 @@ def tie():
     """
     There is no winner. The game resulted in a tie.
     """
+
     global tied
     tied=True
     global again
@@ -245,11 +259,11 @@ def tie():
     askagain=input( "\"accept\" or \"decline\"? ").lower()
     if askagain=="accept":
         print("Let's try again")  
-        # again=True
-        # return again
+        reset_Globals()
+        again=True
+        return True
     elif askagain=="decline":
         print("Sad to see you leave. Come back again soon!")  
-        global again
         again=False  
         return again
     else:
@@ -364,23 +378,24 @@ def leave():
         print("Inavid input")
         return leave()
 
-# def reset_Globals():
-    # player_List=["X","O"]
-    # botnames=["Alicia","Margo","Scott", "Mayson"]
-    # moves1=[]
-    # moves2=[]
-    # amount1=[ ]#5
-    # amount2=[ ]#4
-    # open_Space=[]
-    # open_Space_copy=[]
-    # change_board=0   
-    # firstplayer=""
-    # secondplayer=""
-    # tieFunc=""
-    # again=True
-    # height=5
-    # open_Space=[]
-    # newSpace=open_Space.copy
+
+def reset_Globals():
+    player_List=["X","O"]
+    botnames=["Alicia","Margo","Scott", "Mayson"]
+    moves1=[]
+    moves2=[]
+    amount1=[ ]#5
+    amount2=[ ]#4
+    open_Space=[]
+    open_Space_copy=[]
+    change_board=0   
+    firstplayer=""
+    secondplayer=""
+    tieFunc=""
+    again=True
+    height=5
+    open_Space=[]
+    newSpace=open_Space.copy
 
 
 if __name__=="__main__":
@@ -402,6 +417,7 @@ if __name__=="__main__":
             secondplayer = variableAssignment2(firstplayer)
             loopFriend()
         elif partner == "bot":
+            print("Great choice! You are playing    partner: ", random.choice(botnames))
             tieFunc = "loopBot"
             firstplayer = variableAssignment1()
             secondplayer = variableAssignment2(firstplayer)
@@ -410,4 +426,3 @@ if __name__=="__main__":
             leave()
         
         break
-
