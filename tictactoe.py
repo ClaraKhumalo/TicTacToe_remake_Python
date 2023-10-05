@@ -206,18 +206,9 @@ def spacesBot(player2):
 
 
 def loopBot():
-    while len(moves1)<6 and len(moves2)<5:
-        firstchoice=spacesBotFriend(firstplayer)
-        if not ( firstchoice=="quit") and len(moves1)!=5:
-            secondchoice=spacesBot(secondplayer)
-        if ( firstchoice=="quit"):
-            return leave()
-        elif len(moves1)==5 and len(moves2)==4:
-            print("Winner assessment... ")
-            return winnerAssessment()
-        else:
-            print("invalid input")
-            return loopBot()
+        while won==False or tied==False:
+        firstchoice=spacesFriend1(firstplayer, secondplayer)
+        return firstchoice
 
 
 def winner(): 
