@@ -45,7 +45,10 @@ def game_setup_update():
     global move8 
     global move9 
     global open_space
-    open_space=[]
+    global open_space_copy
+
+    open_space.clear()
+    open_space_copy.clear()
     
     print("\nGame Board")
     if move1 in first_player_moves:
@@ -104,7 +107,7 @@ def game_setup_update():
     print(f"|_{move8}_|", end ="")
     print(f"|_{move9}_|\n", end ="")
     print()
-
+    return "Exit Game Board"
 
 def variable_assignment_1():                  
     """
@@ -119,7 +122,7 @@ def variable_assignment_1():
     elif player_1.lower()=="quit":
         leave()    
     else:
-        print("Invalid choice.\nTry \"X\" or \"O\"")      
+        print("Invalid choice.\nTry entering \"X\" or \"O\"")      
         variable_assignment_1()
     
     return player_1
@@ -196,27 +199,30 @@ def spaces_friend_2(player_2):
     return choice_2b
 
 
-def loop_friend(first_player, second_player):
+def loop_friend():
     """
     Prompts user input until there is a winner or there are no more open
     spaces (there is a tie).
     """
-
+    player_1 = variable_assignment_1()
+    player_2 = variable_assignment_2(player_1)
     while won==False or tied==False:
         game_setup_update()
         print( "choose a number from the list of available spaces: ",str(open_space),"... " )     
-        spaces_friend_1(first_player)
+        spaces_friend_1(player_1)
         winnerAssessment()
         game_setup_update()
         print( "choose a number from the list of available spaces: ",str(open_space),"... " )     
-        spaces_friend_2(second_player)
+        spaces_friend_2(player_2)
         winnerAssessment()
 
 
-def spaces_bot_friend(player_1, player_2):
+def spaces_bot_friend(player_1):
     """
     Gets user input for first player.
     """
+    print(open_space_copy)
+    print(open_space)
     global current_method
 
     for space in range(len(open_space)):  
@@ -235,13 +241,13 @@ def spaces_bot_friend(player_1, player_2):
                 leave()
             elif choice_1 not in open_space:
                 print(choice_1,"is not an available number") 
-                spaces_bot_friend(player_1, player_2)  
+                spaces_bot_friend(player_1)  
             else: 
                 print("invalid input: ", choice_1) 
-                spaces_bot_friend(player_1, player_2)       
+                spaces_bot_friend(player_1)       
         else: 
             print("Invalid Input: ", choice_1)  
-            spaces_bot_friend(player_1, player_2)        
+            spaces_bot_friend(player_1)        
     return int(choice_1)
       
 
@@ -275,18 +281,23 @@ def spaces_bot(player_2):
 
 
 
-def loop_bot(first_player, second_player):
+def loop_bot():
     """
     Prompts user input until there is a winner or there are no more open
     spaces (there is a tie).
     """
-
+    global open_space
+    global open_space_copy
+    player_1 = variable_assignment_1()
+    player_2 = variable_assignment_2(player_1)
     while won==False or tied==False:
         game_setup_update()
+        open_space_copy=open_space.copy()
         print( "choose a number from the list of available spaces: ",str(open_space),"... " )     
-        spaces_bot_friend(player_1, player_2)        
+        spaces_bot_friend(player_1)        
         winnerAssessment()
         game_setup_update()
+        open_space_copy=open_space.copy()
         print( "choose a number from the list of available spaces: ",str(open_space),"... " )     
         spaces_bot(player_2)
         winnerAssessment()
@@ -328,10 +339,37 @@ def reset():
     global move8 
     global move9 
     global open_space
+    global open_space_copy
     global current_method
     global again
+    global first_player_moves
+    global second_player_moves
+    global first_player_moves_amount
+    global second_player_moves_amount
+    global change_board
+    global first_player
+    global second_player
+    global current_player
+    global tie_func
+    global won
+    global tied
+    global board_position_number
+    global first_board_position_number
 
-    open_space=[]
+    first_player_moves.clear()
+    second_player_moves.clear()
+    first_player_moves_amount.clear()
+    second_player_moves_amount.clear()
+    open_space_copy.clear()
+    change_board=0   
+    first_player=""
+    second_player=""
+    current_player=""
+    tie_func=""
+    won=False
+    tied=False
+    board_position_number=0
+    first_board_position_number=0
     move=""
     move1="1"
     move2="2"
@@ -343,7 +381,8 @@ def reset():
     move8="8"
     move9="9"
     current_method=""
-    again=True
+    game_setup_update()
+    open_space_copy=open_space.copy()
 
 def tie():
     """
@@ -473,7 +512,7 @@ def leave():
 
 if __name__ == "__main__":
     open_space = []
-    open_space_copy=["1","2","3","4","5","6","7","8","9"]
+    # open_space_copy=[]
     again = True
     current_method=""
 
@@ -486,14 +525,10 @@ if __name__ == "__main__":
 
         if partner == "2":
             tie_func = "loop_friend"
-            first_player = variable_assignment_1()
-            second_player = variable_assignment_2(first_player)
-            loop_friend(first_player, second_player)
+            loop_friend()
         elif partner == "1":
             print("Great choice! Your playing partner is: ", random.choice(bot_names))
             tie_func = "loop_bot"
-            first_player = variable_assignment_1()
-            second_player = variable_assignment_2(first_player)
-            loop_bot(first_player, second_player)
+            loop_bot()
         elif partner == "quit":
             leave()
